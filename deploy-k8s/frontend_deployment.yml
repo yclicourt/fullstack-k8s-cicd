@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-topic
+  namespace: topics
+spec:
+  selector:
+    matchLabels:
+      app: frontend-topic
+  template:
+    metadata:
+      labels:
+        app: frontend-topic
+    spec:
+      containers:
+      - name: frontend-topic
+        image: yoandevelop/frontend-topic:v1
+        resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+        ports:
+        - containerPort: 3000
+        env:
+        - name: API_URI
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: API_URI
+
+        - name: LOCAL
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: LOCAL
+
+        - name: HOST
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: HOST
+
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: PORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-topic-svc
+  namespace: topics
+spec:
+  type: NodePort
+  selector:
+    app: frontend-topic
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+    nodePort: 30101

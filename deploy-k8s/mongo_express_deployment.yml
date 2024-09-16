@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express-deploy
+  namespace: topics
+spec:
+  selector:
+    matchLabels:
+      app: mongo-express-deploy
+  template:
+    metadata:
+      labels:
+        app: mongo-express-deploy
+    spec:
+      containers:
+      - name: mongo-express-deploy
+        image: mongo-express:latest
+        env:
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-express-config
+              key: ME_CONFIG_MONGODB_ADMINUSERNAME
+
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-express-config
+              key: ME_CONFIG_MONGODB_ADMINPASSWORD
+
+        - name: ME_CONFIG_MONGODB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-express-config
+              key: ME_CONFIG_MONGODB_URL
+        
+        - name: ME_CONFIG_BASICAUTH
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-express-config
+              key: ME_CONFIG_BASICAUTH
+
+        resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+              
+        ports:
+        - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-express-svc
+  namespace: topics
+spec:
+  type: NodePort
+  selector:
+    app: mongo-express-deploy
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+    nodePort: 30007

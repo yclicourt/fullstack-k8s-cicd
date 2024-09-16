@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: topics
+data:
+  API_URI: http://backend-topic-svc:5000/api/topics
+  LOCAL: http://backend-topic-svc:5000/api/topics
+  HOST: 0.0.0.0
+  PORT: '3000'

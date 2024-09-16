@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+
+  frontend:
+    image: yoandevelop/frontend-topic:v1
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - topics_network
+  
+  backend:
+    image: yoandevelop/backend-topic-api:v1
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - topics_network
+
+  db:
+    image: mongo
+    container_name: topicsdb
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./vol_mongo:/data/db
+      - ./db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - topics_network
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    env_file:
+      - .env  
+    networks:
+      - topics_network
+
+networks:
+  topics_network:
