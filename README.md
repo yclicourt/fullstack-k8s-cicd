@@ -1,4 +1,4 @@
-# "Despliegue la Aplicación '295topics' con Docker , Docker Compose, k8s usando minikube y CICD usando Gitlab-CI"
+# "Despliegue la Aplicación '295topics' con Docker , Docker Compose, k8s usando minikube y CICD usando Github-Actions"
 
 ### Arquitectura:
 
@@ -91,11 +91,3 @@ docker exec -it some-mongo mongosh
 > db.Topics.insertOne({Name:"Kubernetes"})
 > show collections;
 > db.Topics.find();
-
-### Para realizar el despliegue en Kubernetes a traves de Helm Charts
-helm repo add gitlab https://charts.gitlab.io
-#Se puede realizar por la via de crear un fichero values.yml
-helm install --namespace <NAMESPACE> gitlab-runner -f <CONFIG_VALUES_FILE> gitlab/gitlab-runner
-#Se puede realizar por la via de pasarle directamente al comando las variables de entorno
-helm install --namespace <NAMESPACE> gitlab-runner-k8s gitlab/gitlab-runner --set gitlabUrl=<URL_SERVER_GITLAB> --set runnerRegistrationToken=<TOKEN_REGISTRATION>
-

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend-topic-api
-        image: yoandevelop/backend-topic-api:v1
+        image: yoandevelop/backend-topic-api:${{ github.sha }}
         env:
         - name: DATABASE_URL
           valueFrom:
@@ -62,4 +62,3 @@ spec:
   - protocol: TCP
     port: 5000
     targetPort: 5000
-    nodePort: 30009

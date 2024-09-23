@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend-topic
-        image: yoandevelop/frontend-topic:v1
+        image: yoandevelop/frontend-topic:${{ github.sha }}
         resources:
             requests:
               memory: "64Mi"
@@ -62,4 +62,3 @@ spec:
   - protocol: TCP
     port: 3000
     targetPort: 3000
-    nodePort: 30101
