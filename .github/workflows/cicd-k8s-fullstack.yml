@@ -96,7 +96,10 @@ jobs:
           kubectl create ns topics
           kubectl config set-context --current --namespace=topics
           kubectl apply -R -f ./deploy-k8s/
-          kubectl wait --for=condition=ready --all pod --namespace=topics
+          kubectl wait --for=condition=ready pod -l app=backend-topic-api
+          kubectl wait --for=condition=ready pod -l app=mongodb
+          kubectl wait --for=condition=ready pod -l app=mongo-express-deploy
+          kubectl wait --for=condition=ready pod -l app=frontend-topic
           kubectl get all
 
       - name: Test service URLs
